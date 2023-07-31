@@ -47,7 +47,7 @@ export class AuthService {
     return `${username} is saved succesffully`;
   }
   async signIn(username: string, pass: string): Promise<any> {
-    console.log('udareno');
+    console.log('udareno', username, pass);
     try {
       const user = await this.usersService.findOne(username);
       if (!user) {
@@ -58,6 +58,7 @@ export class AuthService {
         throw new UnauthorizedException("password doesn't match");
       }
       const payload = { username: user.username, sub: user.id };
+      console.log('payload', payload);
       const token = await this.jwtService.signAsync(payload, {
         expiresIn: '10d',
         secret: jwtConstants.secret,
