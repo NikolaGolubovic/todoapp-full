@@ -119,11 +119,10 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
       <h3>
         Todo List by <span className="uppercase">{username}</span>
       </h3>
-      <FaBeer />
       {todos?.map((todo, index) => (
-        <form className="flex flex-col items-start justify-center mb-3 w-300 border-b-2 border-gray-700 py-5" key={index}>
+        <form className="flex flex-col items-start justify-center mb-3 w-3/4  border-b-2 border-gray-700 py-8" key={index}>
           <textarea
-            className="w-full border-none resize-none"
+            className="w-full border resize-none py-2 px-1 focus:border-blue-500"
             onChange={(e) => editTodoLine(index, e)}
             value={todo.todo}
           ></textarea>
@@ -146,7 +145,9 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
           )}
         </form>
       ))}
-      <button onClick={togglePortal}>Add Todo</button>
+      <button onClick={togglePortal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-10 rounded-md">
+        Create Todo
+      </button>
       {createPortal(
         <CreateModal
           togglePortal={togglePortal}

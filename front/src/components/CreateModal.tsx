@@ -40,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTod
     }
     try {
       const response = await axiosApiInstance.post(
-        "api/todos",
+        "/api/todos",
         {
           todo,
           completed,
