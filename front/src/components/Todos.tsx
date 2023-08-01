@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, FC } from "react";
 import { createPortal } from "react-dom";
 import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import axios, { AxiosError } from "axios";
@@ -6,31 +6,43 @@ import CreateModal from "./CreateModal";
 import { cloneDeep, isEqual } from "lodash-es";
 import { FaBeer } from "react-icons/fa";
 import SwitchComponent from "./SwitchComponent";
+import { getToken } from "../utils/tokenEncription";
+import { tokenLS, usernameLS } from "../constants/tokenNames";
 
-const Todos = () => {
+type PropsTodos = {
+  setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+};
+
+const Todos: FC<PropsTodos> = ({ setUserOn }) => {
   const [todos, setTodos] = useState<{ todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined>();
   const [originalTodos, setOriginalTodos] = useState<{ todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined>();
   const [indexesOfChangedTodos, setIndexesOfChagnedTodos] = useState<number[]>([]);
   const [username, setUsername] = useState("");
   const [portalOpened, setPortalOpened] = useState(false);
-
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchTodos();
   }, []);
 
+  useEffect(() => {
+    let username = localStorage.getItem(usernameLS);
+    if (username) {
+      username = JSON.parse(username);
+      if (username !== null) {
+        setUserOn(true);
+      }
+    }
+  }, [setUserOn]);
+
   async function fetchTodos() {
-    let token = localStorage.getItem("todo-token");
-    let username = localStorage.getItem("todo-username");
+    const token = getToken(tokenLS);
+    let username = localStorage.getItem(usernameLS);
     if (username) {
       username = JSON.parse(username);
       if (username !== null) {
         setUsername(username);
       }
-    }
-    if (token && token !== null) {
-      token = JSON.parse(token);
     }
     try {
       const response = await axiosApiInstance.get(`api/todos/user/?username=${username}&page=${1}&limit=${3}`, {

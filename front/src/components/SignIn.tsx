@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, FC } from "react";
 import axios, { AxiosError } from "axios";
 import { Link } from "react-router-dom";
+import { setToken } from "../utils/tokenEncription";
+import { tokenLS, refreshTokenLS, usernameLS } from "../constants/tokenNames";
+import { useNavigate } from "react-router-dom";
+import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 
-const SignIn = () => {
+type Props = {
+  setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+};
+
+const SignIn: FC<Props> = ({ setUserOn }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  // const [email, setEmail] = useState("");
+  const navigate = useNavigate();
 
   async function signIn(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/login", {
+      const response = await axiosApiInstance.post("/api/auth/login", {
         username,
         password,
       });
       const data = await response.data;
       console.log(data);
-      localStorage.setItem("todo-token", JSON.stringify(data.token));
-      localStorage.setItem("todo-username", JSON.stringify(data.username));
-      localStorage.setItem("todo-refresh", JSON.stringify(data.refreshToken));
+      setToken(data.token, tokenLS);
+      localStorage.setItem(usernameLS, JSON.stringify(data.username));
+      setToken(data.refreshToken, refreshTokenLS);
+      setUserOn(true);
+      navigate("/");
       return data;
     } catch (error) {
       if (axios.isAxiosError(error)) {

@@ -172,9 +172,11 @@ nav ul li a.active {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(37, 96, 223, 0.842);
+  background-color: var(--blue);
   z-index: 9999;
   transition: 0.3s all ease-in-out;
+  border-radius: 8px;
+  padding: 10px;
 }
 
 .modal-content {
@@ -183,6 +185,43 @@ nav ul li a.active {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-content h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.modal-content textarea {
+  width: 100%;
+  height: 200px;
+  border: none;
+  resize: none;
+  margin-bottom: 20px;
+  border: 1px solid var(--blue);
+  padding: 10px;
+}
+
+.type-text {
+  text-transform: capitalize;
+}
+
+.modal-btn-create {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  text-decoration: none;
+  text-align: center;
+  transition: 0.3s all ease-in-out;
+  color: var(--white);
+  background-color: var(--blue);
+  border-radius: 8px;
 }
 
 .show {
@@ -267,9 +306,15 @@ input:checked+.slider:before {
 /* Additional styling for close button, if needed */
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 20px;
+  right: 20px;
   cursor: pointer;
+  font-size: 1.5rem;
+  color: var(--white);
+}
+
+.close-button:hover {
+  color: var(--pink);
 }
 
 /* NON FOUND PAGE */

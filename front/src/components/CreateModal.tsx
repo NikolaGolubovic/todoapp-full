@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import { useClickAway } from "react-use";
+import { FaWindowClose } from "react-icons/fa";
 
 interface ModalProps {
   togglePortal: () => void;
@@ -20,38 +21,16 @@ interface ModalProps {
   modalRef: React.RefObject<HTMLDivElement>;
 }
 
-const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, setPortalOpened, todos, setTodos, modalRef }) => {
+const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTodos, modalRef }) => {
   const [todo, setTodo] = useState("");
   const [completed, setCompleted] = useState(false);
   const [type, setType] = useState<"easy" | "hard">("easy");
 
   useClickAway(modalRef, () => {
-    console.log("clicked outside");
     if (portalOpened) {
       togglePortal();
     }
   });
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event: MouseEvent) => {
-  //     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
-  //       // console.log(modalRef.current.classList, modalRef.current);
-  //       togglePortal();
-  //     }
-  //   };
-
-  //   const handleDocumentClick = (event: MouseEvent) => {
-  //     handleClickOutside(event);
-  //   };
-
-  //   if (portalOpened) {
-  //     document.addEventListener("click", handleDocumentClick);
-  //   }
-
-  //   return () => {
-  //     document.removeEventListener("click", handleDocumentClick);
-  //   };
-  // }, [modalRef, portalOpened, togglePortal]);
 
   async function submitHandler(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
@@ -115,15 +94,13 @@ const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, setPortalOpen
               />
               <span className="slider round"></span>
             </label>
-            <p>{type}</p>
+            <p className="type-text">{type}</p>
           </div>
-          <button type="submit" onClick={(e) => submitHandler(e)}>
+          <button type="submit" className="modal-btn-create" onClick={(e) => submitHandler(e)}>
             Create
           </button>
         </form>
-        <button className="close-button" onClick={togglePortal}>
-          Close
-        </button>
+        <FaWindowClose className="close-button" onClick={togglePortal} />
       </div>
     </div>
   );
