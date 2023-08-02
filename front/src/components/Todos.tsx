@@ -4,10 +4,10 @@ import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import axios, { AxiosError } from "axios";
 import CreateModal from "./CreateModal";
 import { cloneDeep, isEqual } from "lodash-es";
-import { FaBeer } from "react-icons/fa";
 import SwitchComponent from "./SwitchComponent";
 import { getToken } from "../utils/tokenEncription";
 import { tokenLS, usernameLS } from "../constants/tokenNames";
+import ReactPaginate from "react-paginate";
 
 type PropsTodos = {
   setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
@@ -19,7 +19,10 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
   const [indexesOfChangedTodos, setIndexesOfChagnedTodos] = useState<number[]>([]);
   const [username, setUsername] = useState("");
   const [portalOpened, setPortalOpened] = useState(false);
+  const [page, setPage] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const itemsPerPage = 3;
 
   useEffect(() => {
     fetchTodos();
@@ -114,13 +117,17 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
     }
   };
 
+  function handlePageClick(data: { selected: number }) {
+    setPage(data.selected);
+  }
+
   return (
     <div className="flex flex-col items-center justify-center">
       <h3>
         Todo List by <span className="uppercase">{username}</span>
       </h3>
       {todos?.map((todo, index) => (
-        <form className="flex flex-col items-start justify-center mb-3 w-3/4  border-b-2 border-gray-700 py-8" key={index}>
+        <form className="flex flex-col items-start justify-center mb-3 w-2/5  border-b-2 border-gray-700 py-8" key={index}>
           <textarea
             className="w-full border resize-none py-2 px-1 focus:border-blue-500"
             onChange={(e) => editTodoLine(index, e)}
@@ -145,9 +152,13 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
           )}
         </form>
       ))}
-      <button onClick={togglePortal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-10 rounded-md">
-        Create Todo
-      </button>
+      {todos?.length ? (
+        <button onClick={togglePortal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-10 rounded-md">
+          Create Todo
+        </button>
+      ) : (
+        ""
+      )}
       {createPortal(
         <CreateModal
           togglePortal={togglePortal}
@@ -159,6 +170,19 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
         />,
         document.getElementById("modal") as HTMLElement
       )}
+      <ReactPaginate
+        previousLabel={"previous"}
+        nextLabel={"next"}
+        breakLabel={"..."}
+        breakClassName={"break-me"}
+        pageCount={Math.ceil(todos?.length || 0 / itemsPerPage)}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        containerClassName={"pagination"}
+        activeClassName={"active"}
+        forcePage={page}
+        onPageChange={handlePageClick}
+      />
     </div>
   );
 };

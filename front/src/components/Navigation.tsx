@@ -22,6 +22,11 @@ const Navigation: FC<Props> = ({ userOn, setUserOn }) => {
             Home
           </NavLink>
         </li>
+        <li className="ml-10">
+          <NavLink to="/todos" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+            Todos
+          </NavLink>
+        </li>
         {!userOn && (
           <li className="ml-10">
             <NavLink to="login" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
