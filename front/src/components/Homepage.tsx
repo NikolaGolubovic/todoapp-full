@@ -9,13 +9,15 @@ type PropsTodos = {
   setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 };
 
+const pass = import.meta.env.VITE_PASS;
+
 const Homepage: FC<PropsTodos> = ({ setUserOn }) => {
   const navigate = useNavigate();
   async function signIn() {
     try {
       const response = await axiosApiInstance.post("/api/auth/login", {
         username: "nikola",
-        password: "misterija",
+        password: pass,
       });
       const data = await response.data;
       setToken(data.token, tokenLS);
