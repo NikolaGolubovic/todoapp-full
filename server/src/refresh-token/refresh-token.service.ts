@@ -4,7 +4,6 @@ import { RefreshToken } from './refresh-token.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
-import { jwtConstants } from 'src/auth/constants';
 
 @Injectable()
 export class RefreshTokenService {
@@ -62,7 +61,7 @@ export class RefreshTokenService {
     try {
       // Verify the refresh token using your token validation mechanism
       const decodedToken = await this.jwtService.verifyAsync(refreshToken, {
-        secret: jwtConstants.secret,
+        secret: process.env.JWT_SECRET,
       });
       if (
         typeof decodedToken !== 'object' ||

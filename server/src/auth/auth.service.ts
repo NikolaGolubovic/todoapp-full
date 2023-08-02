@@ -10,7 +10,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { SignUpDto } from './dto/auth.dto';
 import { RefreshTokenService } from 'src/refresh-token/refresh-token.service';
-import { jwtConstants } from './constants';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +18,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private refreshTokenService: RefreshTokenService,
+    private configService: ConfigService,
   ) {}
 
   async registerUser(signObject: SignUpDto): Promise<string> {
@@ -47,8 +48,8 @@ export class AuthService {
     return `${username} is saved succesffully`;
   }
   async signIn(username: string, pass: string): Promise<any> {
-    console.log('udareno', username, pass);
     try {
+      const secret = this.configService.get('JWT_SECRET');
       const user = await this.usersService.findOne(username);
       if (!user) {
         throw new UnauthorizedException("doesn't find user with that username");
@@ -58,14 +59,14 @@ export class AuthService {
         throw new UnauthorizedException("password doesn't match");
       }
       const payload = { username: user.username, sub: user.id };
-      console.log('payload', payload);
+
       const token = await this.jwtService.signAsync(payload, {
         expiresIn: '10d',
-        secret: jwtConstants.secret,
+        secret,
       });
       const refreshToken = await this.jwtService.signAsync(payload, {
         expiresIn: '10d',
-        secret: jwtConstants.secret,
+        secret,
       });
       await this.refreshTokenService.saveRefreshToken(refreshToken, user.id);
       return {

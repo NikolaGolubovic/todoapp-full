@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/users/users.module';
-import { jwtConstants } from './constants';
 import { JwtModule } from '@nestjs/jwt';
 import { RefreshTokenModule } from 'src/refresh-token/refresh-token.module';
 
@@ -12,7 +11,7 @@ import { RefreshTokenModule } from 'src/refresh-token/refresh-token.module';
     RefreshTokenModule,
     JwtModule.register({
       global: true,
-      secret: jwtConstants.secret,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60000000s' },
     }),
   ],
