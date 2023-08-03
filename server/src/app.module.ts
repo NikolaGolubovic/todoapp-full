@@ -12,6 +12,8 @@ import { RefreshTokenModule } from './refresh-token/refresh-token.module';
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './auth/google.strategy';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -26,6 +28,10 @@ import { GoogleStrategy } from './auth/google.strategy';
       subscribers: ['dist/**/*.subscriber.js'],
       autoLoadEntities: true,
       synchronize: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'dist'),
+      serveRoot: '/static',
     }),
     TypeOrmModule.forFeature([User, Todo]),
     TodoModule,
