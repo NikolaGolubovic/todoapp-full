@@ -11,8 +11,6 @@ import {
   ValidationPipe,
   Query,
 } from '@nestjs/common';
-
-import { TodoType } from '../data';
 import { CreateTodoDto, UpdateTodoDto } from '../todos/dto/todo.dto';
 import { TodoService } from './todo.service';
 import '../global';
@@ -20,7 +18,6 @@ import { RequestUser } from '../users/user.decorator';
 
 import { User } from '../users/user.entity';
 import { AuthGuard } from '../auth/auth.guard';
-import { ValidateTodoTypePipe } from '../pipes/param-enum-validation.pipe';
 
 @Controller('api/todos/')
 export class TodoController {

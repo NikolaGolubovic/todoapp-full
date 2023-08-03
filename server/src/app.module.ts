@@ -30,8 +30,8 @@ import { join } from 'path';
       synchronize: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'dist'),
-      serveRoot: '/static',
+      rootPath: join(__dirname, '..', '..', 'build'),
+      serveRoot: '/',
     }),
     TypeOrmModule.forFeature([User, Todo]),
     TodoModule,

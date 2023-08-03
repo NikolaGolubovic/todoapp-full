@@ -24,7 +24,7 @@
     "migration:generate": "npm run typeorm -- migration:generate",
     "migration:up": "npm run typeorm -- migration:run",
     "migration:down": "npm run typeorm -- migration:revert",
-    "build:ui": "rm -rf build && cd ../front && npm run build --prod && cp -r dist ../server"
+    "build:ui": "rm -rf build && cd ../front && npm run build --prod && cp -r build ../server"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
