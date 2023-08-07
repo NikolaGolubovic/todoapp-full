@@ -8,4 +8,11 @@ export default defineConfig({
   build: {
     outDir: "../front/build",
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+      },
+    },
+  },
 });
