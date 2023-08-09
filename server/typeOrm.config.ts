@@ -1,15 +1,12 @@
 import { DataSource } from 'typeorm';
-import { Todo } from './src/todos/todo.entity';
-import { User } from './src/users/user.entity';
 
 export default new DataSource({
   type: 'postgres',
-  host: '127.0.0.1',
+  host: process.env.DATABASE_HOST,
   port: 5432,
-  username: 'postgres',
-  password: 'misterija',
-  database: 'test',
-  entities: ['dist/entities/**/*{.js,.ts}'],
-  migrations: ['dist/migrations/**/*{.js,.ts}'],
-  subscribers: ['dist/subscribers/**/*{.js,.ts}'],
+  username: process.env.DATABASE_USERNAME,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  entities: ['dist/**/*.entity.js'],
+  subscribers: ['dist/**/*.subscriber.js'],
 });
