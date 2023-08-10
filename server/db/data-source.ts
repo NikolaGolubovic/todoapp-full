@@ -1,5 +1,7 @@
 import { DataSource, DataSourceOptions } from "typeorm";
 
+console.log("process.env.DATABASE_URL", process.env.DATABASE_URL);
+
 export const dataSourceConfig: DataSourceOptions = {
   type: "postgres",
   // host: process.env.DATABASE_HOST,
