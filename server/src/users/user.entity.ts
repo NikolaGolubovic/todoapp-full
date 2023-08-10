@@ -1,9 +1,9 @@
-import { Todo } from '../todos/todo.entity';
-import { RefreshToken } from '../refresh-token/refresh-token.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { UserValidationRules } from '../validations/user.validation';
+import { Todo } from "../todos/todo.entity";
+import { RefreshToken } from "../refresh-token/refresh-token.entity";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { UserValidationRules } from "../validations/user.validation";
 
-@Entity()
+@Entity({ name: "users", schema: "public" })
 export class User extends UserValidationRules {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,7 +17,7 @@ export class User extends UserValidationRules {
   @Column()
   email: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
   @OneToMany(() => Todo, (todo) => todo.user)

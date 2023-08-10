@@ -1,8 +1,8 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../users/user.entity';
-import { TodoType } from '../data';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "../users/user.entity";
+import { TodoType } from "../data";
 
-@Entity()
+@Entity({ name: "todos", schema: "public" })
 export class Todo {
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,7 +19,7 @@ export class Todo {
   @Column()
   userId: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.todos)

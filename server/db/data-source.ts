@@ -14,7 +14,6 @@ export const dataSourceConfig: DataSourceOptions = {
     rejectUnauthorized: false,
   },
 };
-console.log("alohaaaaa", dataSourceConfig);
 
 const dataSource = new DataSource(dataSourceConfig);
 export default dataSource;
