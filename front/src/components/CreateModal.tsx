@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import { useClickAway } from "react-use";
 import { FaWindowClose } from "react-icons/fa";
+import { getToken } from "../utils/tokenEncription";
+import { tokenLS, usernameLS } from "../constants/tokenNames";
 
 interface ModalProps {
   togglePortal: () => void;
@@ -34,10 +36,7 @@ const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTod
 
   async function submitHandler(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.preventDefault();
-    let token = localStorage.getItem("todo-token");
-    if (token) {
-      token = JSON.parse(token);
-    }
+    const token = getToken(tokenLS);
     try {
       const response = await axiosApiInstance.post(
         "/api/todos",
@@ -49,6 +48,7 @@ const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTod
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            application: "application/json",
           },
         }
       );

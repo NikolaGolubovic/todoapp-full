@@ -152,13 +152,11 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
           )}
         </form>
       ))}
-      {todos?.length ? (
+      {
         <button onClick={togglePortal} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mt-10 rounded-md">
           Create Todo
         </button>
-      ) : (
-        ""
-      )}
+      }
       {createPortal(
         <CreateModal
           togglePortal={togglePortal}

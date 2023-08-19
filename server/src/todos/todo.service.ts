@@ -1,14 +1,14 @@
-import { TodoType } from '../data';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { TodoType } from "../data";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import {
   CreateTodoDto,
   TodoResponseDto,
   UpdateTodoDto,
-} from '../todos/dto/todo.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Todo } from './todo.entity';
-import { User } from '../users/user.entity';
+} from "../todos/dto/todo.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Repository } from "typeorm";
+import { Todo } from "./todo.entity";
+import { User } from "../users/user.entity";
 
 @Injectable()
 export class TodoService {
@@ -20,7 +20,7 @@ export class TodoService {
   ) {}
 
   initTest() {
-    const testObj = { id: 1, title: 'Test', description: 'Test', type: 'hard' };
+    const testObj = { id: 1, title: "Test", description: "Test", type: "hard" };
     return [testObj];
   }
 
@@ -35,20 +35,21 @@ export class TodoService {
     const user = await this.userRepository.findOne({
       where: { username: username },
     });
-    const newTodo: Omit<Todo, 'id' | 'createdAt'> = {
+    const newTodo: Omit<Todo, "id" | "createdAt"> = {
       userId: user.id,
       todo: todoData.todo,
       type: todoData.type,
       completed: false,
       user: { id: user.id, username: user.username, email: user.email },
     };
+    console.log("aloha");
     try {
       this.todoRepository.save(newTodo);
     } catch (error) {
       new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Error while saving todo',
+          error: "Error while saving todo",
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -65,12 +66,12 @@ export class TodoService {
       new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Error while updating todo',
+          error: "Error while updating todo",
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return 'item is successfuly updated';
+    return "item is successfuly updated";
   }
   async removeTodoById(id: number): Promise<string> {
     try {
@@ -79,22 +80,22 @@ export class TodoService {
       new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Error while deleting todo',
+          error: "Error while deleting todo",
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
-    return 'item is successfuly removed';
+    return "item is successfuly removed";
   }
   async getTodosByUsername(username: string, page: number, limit: number) {
     try {
-      console.log('username', username);
+      console.log("username", username);
       const skip = (page - 1) * limit;
 
       const [todos, totalCount] = await this.todoRepository
-        .createQueryBuilder('todo')
-        .leftJoin('todo.user', 'user')
-        .where('user.username = :username', { username })
+        .createQueryBuilder("todo")
+        .leftJoin("todo.user", "user")
+        .where("user.username = :username", { username })
         .skip(skip)
         .take(limit)
         .getManyAndCount();
@@ -117,7 +118,7 @@ export class TodoService {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: 'Error while getting todos',
+          error: "Error while getting todos",
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );

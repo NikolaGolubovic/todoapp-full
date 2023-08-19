@@ -10,16 +10,16 @@ import {
   UseGuards,
   ValidationPipe,
   Query,
-} from '@nestjs/common';
-import { CreateTodoDto, UpdateTodoDto } from '../todos/dto/todo.dto';
-import { TodoService } from './todo.service';
-import '../global';
-import { RequestUser } from '../users/user.decorator';
+} from "@nestjs/common";
+import { CreateTodoDto, UpdateTodoDto } from "../todos/dto/todo.dto";
+import { TodoService } from "./todo.service";
+import "../global";
+import { RequestUser } from "../users/user.decorator";
 
-import { User } from '../users/user.entity';
-import { AuthGuard } from '../auth/auth.guard';
+import { User } from "../users/user.entity";
+import { AuthGuard } from "../auth/auth.guard";
 
-@Controller('api/todos/')
+@Controller("api/todos/")
 export class TodoController {
   constructor(private readonly todoService: TodoService) {}
 
@@ -35,12 +35,12 @@ export class TodoController {
   //   return this.todoService.findAll(typeTodo);
   // }
 
-  @Get('user/')
+  @Get("user/")
   getTodosByUsername(
-    @Query('username', new ValidationPipe({ transform: true }))
+    @Query("username", new ValidationPipe({ transform: true }))
     validatedUsername: string,
-    @Query('page', new ValidationPipe({ transform: true })) page: number,
-    @Query('limit', new ValidationPipe({ transform: true })) limit: number,
+    @Query("page", new ValidationPipe({ transform: true })) page: number,
+    @Query("limit", new ValidationPipe({ transform: true })) limit: number,
   ) {
     console.log(validatedUsername, page, limit);
     return this.todoService.getTodosByUsername(validatedUsername, page, limit);
@@ -52,13 +52,14 @@ export class TodoController {
     @Body(new ValidationPipe()) body: CreateTodoDto,
     @RequestUser() user: User,
   ): Promise<CreateTodoDto> {
+    console.log("hello");
     return this.todoService.createTodo(body, user.username);
   }
 
   @UseGuards(AuthGuard)
-  @Put(':id')
+  @Put(":id")
   updateTodo(
-    @Param('id', new ValidationPipe({ transform: true })) validatedId: number,
+    @Param("id", new ValidationPipe({ transform: true })) validatedId: number,
     @Body(new ValidationPipe()) body: UpdateTodoDto,
   ): Promise<string> {
     return this.todoService.updateTodo(validatedId, body);
@@ -66,9 +67,9 @@ export class TodoController {
 
   @UseGuards(AuthGuard)
   @HttpCode(204)
-  @Delete(':id')
+  @Delete(":id")
   removeTodo(
-    @Param('id', new ValidationPipe({ transform: true })) validatedId: number,
+    @Param("id", new ValidationPipe({ transform: true })) validatedId: number,
   ) {
     return this.todoService.removeTodoById(validatedId);
   }

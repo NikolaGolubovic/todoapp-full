@@ -21,6 +21,7 @@ const SignUp = () => {
         if (axiosError.response?.status === 401) {
           console.log("Unauthorized");
         } else {
+          console.log("error resposne data", error.response?.data);
           throw new Error(error.response?.data);
         }
       } else {
