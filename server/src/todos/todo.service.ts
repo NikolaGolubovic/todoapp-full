@@ -42,7 +42,6 @@ export class TodoService {
       completed: false,
       user: { id: user.id, username: user.username, email: user.email },
     };
-    console.log("aloha");
     try {
       this.todoRepository.save(newTodo);
     } catch (error) {
@@ -105,6 +104,7 @@ export class TodoService {
           completed: todo.completed,
           todo: todo.todo,
           type: todo.type,
+          id: todo.id,
         });
       });
 

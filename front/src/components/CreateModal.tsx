@@ -3,16 +3,17 @@ import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import { useClickAway } from "react-use";
 import { FaWindowClose } from "react-icons/fa";
 import { getToken } from "../utils/tokenEncription";
-import { tokenLS, usernameLS } from "../constants/tokenNames";
+import { tokenLS } from "../constants/tokenNames";
 
 interface ModalProps {
   togglePortal: () => void;
   portalOpened: boolean;
   setPortalOpened: React.Dispatch<React.SetStateAction<boolean>>;
-  todos: { todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined;
+  todos: { id: number; todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined;
   setTodos: React.Dispatch<
     React.SetStateAction<
       | {
+          id: number;
           todo: string;
           completed: boolean;
           type: "easy" | "hard";
@@ -53,9 +54,8 @@ const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTod
         }
       );
       if (response.status === 201) {
-        console.log("success", "response");
         if (todos === undefined) return console.log("todos is undefined");
-        setTodos([...todos, { todo, completed, type }]);
+        setTodos([...todos, { id: response.data.userId, todo, completed, type }]);
       }
       return "success";
     } catch (error: unknown) {

@@ -14,8 +14,10 @@ type PropsTodos = {
 };
 
 const Todos: FC<PropsTodos> = ({ setUserOn }) => {
-  const [todos, setTodos] = useState<{ todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined>();
-  const [originalTodos, setOriginalTodos] = useState<{ todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined>();
+  const [todos, setTodos] = useState<{ id: number; todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined>();
+  const [originalTodos, setOriginalTodos] = useState<
+    { id: number; todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined
+  >();
   const [indexesOfChangedTodos, setIndexesOfChagnedTodos] = useState<number[]>([]);
   const [username, setUsername] = useState("");
   const [portalOpened, setPortalOpened] = useState(false);
@@ -54,6 +56,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
         },
       });
       const todos = await response.data.data;
+      console.log("todos", todos);
       setTodos(todos);
       setOriginalTodos(todos);
     } catch (error: unknown) {
@@ -121,27 +124,54 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
     setPage(data.selected);
   }
 
+  async function deleteTodo(id: number) {
+    const token = getToken(tokenLS);
+    try {
+      const response = await axiosApiInstance.delete(`api/todos/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 204) {
+        setTodos(todos?.filter((todo) => todo.id !== id));
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   return (
     <div className="flex flex-col items-center justify-center">
       <h3>
         Todo List by <span className="uppercase">{username}</span>
       </h3>
       {todos?.map((todo, index) => (
-        <form className="flex flex-col items-start justify-center mb-3 w-2/5  border-b-2 border-gray-700 py-8" key={index}>
+        <form className="flex flex-col items-start justify-center mb-3 w-2/5  border-b-2 border-gray-700 py-8" key={todo.id}>
           <textarea
             className="w-full border resize-none py-2 px-1 focus:border-blue-500"
-            onChange={(e) => editTodoLine(index, e)}
+            onChange={(e) => editTodoLine(todo.id, e)}
             value={todo.todo}
           ></textarea>
           <div className="flex flex-row items-center justify-center">
-            <SwitchComponent changeFunc={changeCompleted} index={index} />
+            <SwitchComponent changeFunc={changeCompleted} index={todo.id} />
             <p className="ml-2">{todo.completed ? "completed" : "non completed"}</p>
           </div>
           <div className="flex flex-row items-center justify-center">
-            <SwitchComponent changeFunc={changeType} index={index} />
+            <SwitchComponent changeFunc={changeType} index={todo.id} />
             <p className="ml-2">{todo.type === "easy" ? "Easy to do" : "Hard to do"}</p>
           </div>
-          {indexesOfChangedTodos.includes(index) && (
+          <div className="flex flex-row items-center justify-end self-end">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                deleteTodo(todo.id);
+              }}
+              className="bg-red-500 hover:bg-red-700 text-white px-1 py-0.5 rounded-md text-base leading-normal"
+            >
+              Delete
+            </button>
+          </div>
+          {indexesOfChangedTodos.includes(todo.id) && (
             <button
               className="inline-block align-baseline py-1 px-2 rounded-md border-0 cursor-pointer text-base font-medium text-white bg-blue-500 transition duration-300 ease-in-out"
               onSubmit={editTodo}
