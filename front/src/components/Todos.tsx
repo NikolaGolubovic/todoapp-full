@@ -12,9 +12,10 @@ import ReactPaginate from "react-paginate";
 type PropsTodos = {
   setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
 };
+type TodoType = { id: number; todo: string; completed: boolean; type: "easy" | "hard" };
 
 const Todos: FC<PropsTodos> = ({ setUserOn }) => {
-  const [todos, setTodos] = useState<{ id: number; todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined>();
+  const [todos, setTodos] = useState<TodoType[] | undefined>();
   const [originalTodos, setOriginalTodos] = useState<
     { id: number; todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined
   >();
@@ -77,10 +78,6 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
     setPortalOpened((prevPortalOpened) => !prevPortalOpened);
   };
 
-  const editTodo = () => {
-    console.log("Edit Todo");
-  };
-
   const editTodoLine = (index: number, e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newTodos = cloneDeep(todos);
     if (index !== undefined && index !== -1 && newTodos !== undefined) {
@@ -124,6 +121,24 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
     setPage(data.selected);
   }
 
+  const editTodo = async (editedTodo: TodoType, e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const { id, ...todo } = editedTodo;
+    const token = getToken(tokenLS);
+    try {
+      const response = await axiosApiInstance.put(`api/todos/${id}`, todo, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        console.log("Todo edited");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   async function deleteTodo(id: number) {
     const token = getToken(tokenLS);
     try {
@@ -149,15 +164,15 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
         <form className="flex flex-col items-start justify-center mb-3 w-2/5  border-b-2 border-gray-700 py-8" key={todo.id}>
           <textarea
             className="w-full border resize-none py-2 px-1 focus:border-blue-500"
-            onChange={(e) => editTodoLine(todo.id, e)}
+            onChange={(e) => editTodoLine(index, e)}
             value={todo.todo}
           ></textarea>
           <div className="flex flex-row items-center justify-center">
-            <SwitchComponent changeFunc={changeCompleted} index={todo.id} />
+            <SwitchComponent changeFunc={changeCompleted} index={index} />
             <p className="ml-2">{todo.completed ? "completed" : "non completed"}</p>
           </div>
           <div className="flex flex-row items-center justify-center">
-            <SwitchComponent changeFunc={changeType} index={todo.id} />
+            <SwitchComponent changeFunc={changeType} index={index} />
             <p className="ml-2">{todo.type === "easy" ? "Easy to do" : "Hard to do"}</p>
           </div>
           <div className="flex flex-row items-center justify-end self-end">
@@ -171,11 +186,10 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
               Delete
             </button>
           </div>
-          {indexesOfChangedTodos.includes(todo.id) && (
+          {indexesOfChangedTodos.includes(index) && (
             <button
               className="inline-block align-baseline py-1 px-2 rounded-md border-0 cursor-pointer text-base font-medium text-white bg-blue-500 transition duration-300 ease-in-out"
-              onSubmit={editTodo}
-              type="submit"
+              onClick={(e) => editTodo({ id: todo.id, todo: todo.todo, completed: todo.completed, type: todo.type }, e)}
             >
               Edit
             </button>
