@@ -168,11 +168,11 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
             value={todo.todo}
           ></textarea>
           <div className="flex flex-row items-center justify-center">
-            <SwitchComponent changeFunc={changeCompleted} index={index} />
+            <SwitchComponent changeFunc={changeCompleted} index={index} completed={todo.completed} />
             <p className="ml-2">{todo.completed ? "completed" : "non completed"}</p>
           </div>
           <div className="flex flex-row items-center justify-center">
-            <SwitchComponent changeFunc={changeType} index={index} />
+            <SwitchComponent changeFunc={changeType} index={index} type={todo.type} />
             <p className="ml-2">{todo.type === "easy" ? "Easy to do" : "Hard to do"}</p>
           </div>
           <div className="flex flex-row items-center justify-end self-end">
