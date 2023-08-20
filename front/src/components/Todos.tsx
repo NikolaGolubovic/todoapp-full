@@ -176,6 +176,14 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
             <p className="ml-2">{todo.type === "easy" ? "Easy to do" : "Hard to do"}</p>
           </div>
           <div className="flex flex-row items-center justify-end self-end">
+            {indexesOfChangedTodos.includes(index) && (
+              <button
+                className="inline-block align-baseline mr-2 px-1 py-0.5 rounded-md text-base leading-normal text-white bg-blue-500 transition duration-300 ease-in-out"
+                onClick={(e) => editTodo({ id: todo.id, todo: todo.todo, completed: todo.completed, type: todo.type }, e)}
+              >
+                Edit
+              </button>
+            )}
             <button
               onClick={(e) => {
                 e.preventDefault();
@@ -186,14 +194,6 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
               Delete
             </button>
           </div>
-          {indexesOfChangedTodos.includes(index) && (
-            <button
-              className="inline-block align-baseline py-1 px-2 rounded-md border-0 cursor-pointer text-base font-medium text-white bg-blue-500 transition duration-300 ease-in-out"
-              onClick={(e) => editTodo({ id: todo.id, todo: todo.todo, completed: todo.completed, type: todo.type }, e)}
-            >
-              Edit
-            </button>
-          )}
         </form>
       ))}
       {

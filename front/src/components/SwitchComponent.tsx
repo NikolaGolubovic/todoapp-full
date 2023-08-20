@@ -16,7 +16,7 @@ const SwitchTailwind = ({ changeFunc, index, completed, type }: switchProps) => 
       }}
       as={Fragment}
     >
-      {({ checked }) => {
+      {() => {
         /* Use the `checked` state to conditionally style the button. */
         return (
           <button
