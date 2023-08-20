@@ -15,6 +15,7 @@ export const dataSourceConfig: DataSourceOptions = {
   ssl: {
     rejectUnauthorized: false,
   },
+  synchronize: true,
 };
 
 const dataSource = new DataSource(dataSourceConfig);

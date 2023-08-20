@@ -9,6 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Todo } from "./todo.entity";
 import { User } from "../users/user.entity";
+import { find } from "rxjs";
 
 @Injectable()
 export class TodoService {
@@ -57,10 +58,9 @@ export class TodoService {
   }
 
   async updateTodo(id: number, body: UpdateTodoDto): Promise<string> {
-    const findTodo = await this.todoRepository.findOne({ where: { id } });
-    const updatedContent = { ...findTodo, ...body };
     try {
-      await this.todoRepository.update(id, updatedContent);
+      const response = await this.todoRepository.update(id, body);
+      console.log("response", response);
     } catch (error) {
       new HttpException(
         {
@@ -69,8 +69,9 @@ export class TodoService {
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+      console.log(error.message);
+      return error;
     }
-    return "item is successfuly updated";
   }
   async removeTodoById(id: number): Promise<string> {
     try {
