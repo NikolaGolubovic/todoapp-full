@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import axios, { AxiosError } from "axios";
 import CreateModal from "./CreateModal";
-import { cloneDeep, isEqual } from "lodash-es";
+import { cloneDeep, isEqual, set } from "lodash-es";
 import SwitchComponent from "./SwitchComponent";
 import { getToken } from "../utils/tokenEncription";
 import { tokenLS, usernameLS } from "../constants/tokenNames";
@@ -23,10 +23,10 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
   const [username, setUsername] = useState("");
   const [portalOpened, setPortalOpened] = useState(false);
   const [page, setPage] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const itemsPerPage = 3;
-
   useEffect(() => {
     fetchTodos();
   }, []);
@@ -57,8 +57,8 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
         },
       });
       const todos = await response.data.data;
-      console.log("todos", todos);
       setTodos(todos);
+      setTotalItems(response.data.total);
       setOriginalTodos(todos);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -117,7 +117,16 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
     }
   };
 
-  function handlePageClick(data: { selected: number }) {
+  async function handlePageClick(data: { selected: number }) {
+    const response = await axiosApiInstance.get(`api/todos/user/?username=${username}&page=${data.selected + 1}&limit=${3}`, {
+      headers: {
+        Authorization: `Bearer ${getToken(tokenLS)}`,
+      },
+    });
+    const todos = await response.data.data;
+    console.log(todos, "total");
+    setTotalItems(response.data.total);
+    setTodos(todos);
     setPage(data.selected);
   }
 
@@ -217,7 +226,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
         nextLabel={"next"}
         breakLabel={"..."}
         breakClassName={"break-me"}
-        pageCount={Math.ceil(todos?.length || 0 / itemsPerPage)}
+        pageCount={Math.ceil((totalItems || 0) / itemsPerPage)}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         containerClassName={"pagination"}

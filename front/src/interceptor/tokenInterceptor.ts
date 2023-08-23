@@ -9,7 +9,6 @@ export const axiosApiInstance = axios.create({
 
 axiosApiInstance.interceptors.response.use(
   (response) => {
-    console.log("response", response);
     return response;
   },
   async (error) => {
@@ -21,6 +20,8 @@ axiosApiInstance.interceptors.response.use(
       let refreshToken = localStorage.getItem("todo-refresh");
       if (refreshToken) {
         refreshToken = JSON.parse(refreshToken);
+      } else {
+        return;
       }
       axios.defaults.headers.common["Authorization"] = `Bearer ${refreshToken}`;
       const response = await axiosApiInstance.post("api/refresh-token", { refreshToken });
