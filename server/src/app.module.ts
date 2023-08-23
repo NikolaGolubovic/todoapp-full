@@ -16,7 +16,9 @@ import { dataSourceConfig } from "db/data-source";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot(dataSourceConfig),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "..", "..", "build"),

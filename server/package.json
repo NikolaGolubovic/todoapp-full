@@ -20,10 +20,10 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "test:e2e:watch": "jest --config ./test/jest-e2e.json --watch",
     "typeorm": "npx typeorm -d dist/db/data-source.js",
-    "migration:generate": "npm run typeorm -- migration:generate",
-    "migration:run": "npm run typeorm -- migration:run",
-    "migration:revert": "npm run typeorm -- migration:revert",
-    "migration:create": "npm run typeorm -- migration:create",
+    "migration:generate": "npx dotenv npm run typeorm -- migration:generate",
+    "migration:run": "npx dotenv npm run typeorm -- migration:run",
+    "migration:revert": "npx dotenv npm run typeorm -- migration:revert",
+    "migration:create": "npx dotenv npm run typeorm -- migration:create",
     "build:ui": "rm -rf build && cd ../front && npm run build --prod && cp -r build ../server"
   },
   "dependencies": {

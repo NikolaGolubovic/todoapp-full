@@ -60,7 +60,6 @@ export class AuthService {
         throw new UnauthorizedException("password doesn't match");
       }
       const payload = { username: user.username, sub: user.id };
-
       const token = await this.jwtService.signAsync(payload, {
         expiresIn: "10d",
         secret,

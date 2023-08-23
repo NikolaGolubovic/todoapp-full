@@ -1,9 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { RefreshToken } from './refresh-token.entity';
-import { Repository } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { RefreshToken } from "./refresh-token.entity";
+import { Repository } from "typeorm";
+import { UsersService } from "src/users/users.service";
+import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class RefreshTokenService {
@@ -29,7 +29,7 @@ export class RefreshTokenService {
       .createQueryBuilder()
       .delete()
       .from(RefreshToken)
-      .where('createdAt < :cutoffDate', { cutoffDate });
+      .where("createdAt < :cutoffDate", { cutoffDate });
 
     await queryBuilder.execute();
   }
@@ -40,7 +40,7 @@ export class RefreshTokenService {
       const userId = await this.verifyRefreshToken(refreshToken);
       if (!userId) {
         // this.refreshTokenRepository.delete({ refreshToken });
-        throw new UnauthorizedException('Invalid action, please sign up again');
+        throw new UnauthorizedException("Invalid action, please sign up again");
       }
 
       // Generate a new access token
@@ -52,7 +52,7 @@ export class RefreshTokenService {
         token: accessToken,
       };
     } catch (error) {
-      console.log('hello');
+      console.log("error message: ", error.message);
       throw new UnauthorizedException(error.message);
     }
   }
@@ -64,10 +64,10 @@ export class RefreshTokenService {
         secret: process.env.JWT_SECRET,
       });
       if (
-        typeof decodedToken !== 'object' ||
-        !decodedToken.hasOwnProperty('sub')
+        typeof decodedToken !== "object" ||
+        !decodedToken.hasOwnProperty("sub")
       ) {
-        throw new Error('Invalid token payload');
+        throw new Error("Invalid token payload");
       }
 
       const userId = decodedToken.sub; // Assuming 'sub' contains the user ID
