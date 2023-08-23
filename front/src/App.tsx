@@ -32,7 +32,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Homepage setUserOn={setUserOn} />} />
         <Route path="/todos" element={<Todos setUserOn={setUserOn} notify={notify} />} />
-        <Route path="/login" element={<SignIn setUserOn={setUserOn} />} />
+        <Route path="/login" element={<SignIn setUserOn={setUserOn} notify={notify} />} />
         <Route path="/register" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

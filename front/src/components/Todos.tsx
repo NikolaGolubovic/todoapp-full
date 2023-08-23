@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 import axios, { AxiosError } from "axios";
 import CreateModal from "./CreateModal";
-import { cloneDeep, isEqual, set } from "lodash-es";
+import { cloneDeep, isEqual } from "lodash-es";
 import SwitchComponent from "./SwitchComponent";
 import { getToken } from "../utils/tokenEncription";
 import { tokenLS, usernameLS } from "../constants/tokenNames";
@@ -30,6 +30,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
   const itemsPerPage = 3;
   useEffect(() => {
     fetchTodos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -65,12 +66,10 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 401) {
-          console.log("Unauthorized");
+          notify(error.response?.data.message, "error");
         } else {
-          throw new Error(error.response?.data);
+          notify(error.response?.data.message, "error");
         }
-      } else {
-        console.log(error);
       }
     }
   }
@@ -162,7 +161,9 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
         setTodos(todos?.filter((todo) => todo.id !== id));
       }
     } catch (err) {
-      console.log(err);
+      if (axios.isAxiosError(err)) {
+        notify(err.response?.data.message || "doslo je do greske", "error");
+      }
     }
   }
 

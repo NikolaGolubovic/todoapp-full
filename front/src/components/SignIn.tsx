@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import { setToken } from "../utils/tokenEncription";
 import { tokenLS, refreshTokenLS, usernameLS } from "../constants/tokenNames";
 import { useNavigate } from "react-router-dom";
-import { axiosApiInstance } from "../interceptor/tokenInterceptor";
 
 type Props = {
   setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  notify: (msg: string, type: string) => void;
 };
 
-const SignIn: FC<Props> = ({ setUserOn }) => {
+const SignIn: FC<Props> = ({ setUserOn, notify }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -18,29 +18,28 @@ const SignIn: FC<Props> = ({ setUserOn }) => {
   async function signIn(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     e.preventDefault();
     try {
-      const response = await axiosApiInstance.post("/api/auth/login", {
+      const response = await axios.post("/api/auth/login", {
         username,
         password,
       });
       const data = await response.data;
-      console.log(data);
       setToken(data.token, tokenLS);
       localStorage.setItem(usernameLS, JSON.stringify(data.username));
       setToken(data.refreshToken, refreshTokenLS);
       setUserOn(true);
       navigate("/");
+      notify("Successfully logged in", "success");
       return data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 401) {
+          notify(error.response?.data.message, "error");
           throw new Error("Invalid credentials");
         } else {
-          console.log(error, "error u poslednjem");
+          notify(error.response?.data.message, "error");
           throw new Error(error.response?.data);
         }
-      } else {
-        console.log(error);
       }
     }
   }
