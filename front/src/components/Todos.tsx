@@ -11,10 +11,11 @@ import ReactPaginate from "react-paginate";
 
 type PropsTodos = {
   setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
+  notify: (msg: string, type: string) => void;
 };
 type TodoType = { id: number; todo: string; completed: boolean; type: "easy" | "hard" };
 
-const Todos: FC<PropsTodos> = ({ setUserOn }) => {
+const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
   const [todos, setTodos] = useState<TodoType[] | undefined>();
   const [originalTodos, setOriginalTodos] = useState<
     { id: number; todo: string; completed: boolean; type: "easy" | "hard" }[] | undefined
@@ -124,7 +125,6 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
       },
     });
     const todos = await response.data.data;
-    console.log(todos, "total");
     setTotalItems(response.data.total);
     setTodos(todos);
     setPage(data.selected);
@@ -141,7 +141,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn }) => {
         },
       });
       if (response.status === 200) {
-        console.log("Todo edited");
+        notify("Todo edited", "success");
       }
     } catch (error) {
       console.log(error);
