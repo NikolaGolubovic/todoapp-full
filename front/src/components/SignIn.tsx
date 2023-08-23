@@ -36,6 +36,7 @@ const SignIn: FC<Props> = ({ setUserOn }) => {
         if (axiosError.response?.status === 401) {
           throw new Error("Invalid credentials");
         } else {
+          console.log(error, "error u poslednjem");
           throw new Error(error.response?.data);
         }
       } else {

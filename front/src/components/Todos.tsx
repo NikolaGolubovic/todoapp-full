@@ -144,7 +144,9 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
         notify("Todo edited", "success");
       }
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        notify(error.response?.data.message, "error");
+      }
     }
   };
 
