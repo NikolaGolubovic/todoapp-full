@@ -30,6 +30,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
   togglePortal,
   portalOpened,
+  setPortalOpened,
   todos,
   setTodos,
   modalRef,
@@ -74,6 +75,8 @@ const Modal: React.FC<ModalProps> = ({
           setTodos([newTodo]);
           setTotalItems(totalItems + 1);
         }
+        notify("Todo created successfully", "success");
+        setPortalOpened(false);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {

@@ -29,7 +29,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
 
   const itemsPerPage = 3;
   useEffect(() => {
-    fetchTodos();
+    fetchTodos(page);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -43,7 +43,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
     }
   }, [setUserOn]);
 
-  async function fetchTodos() {
+  async function fetchTodos(page: number) {
     const token = getToken(tokenLS);
     let username = localStorage.getItem(usernameLS);
     if (username) {
@@ -53,7 +53,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
       }
     }
     try {
-      const response = await axiosApiInstance.get(`api/todos/user/?username=${username}&page=${1}&limit=${3}`, {
+      const response = await axiosApiInstance.get(`api/todos/user/?username=${username}&page=${page + 1}&limit=${3}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -158,7 +158,13 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
         },
       });
       if (response.status === 204) {
-        setTodos(todos?.filter((todo) => todo.id !== id));
+        if (todos?.length === 1 && page !== 0) {
+          setPage(page - 1);
+          fetchTodos(page - 1);
+        } else {
+          setTodos(todos?.filter((todo) => todo.id !== id));
+        }
+        notify("Todo deleted", "success");
       }
     } catch (err) {
       if (axios.isAxiosError(err)) {
