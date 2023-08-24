@@ -52,7 +52,7 @@ export class TodoController {
     @Body(new ValidationPipe()) body: CreateTodoDto,
     @RequestUser() user: User,
   ): Promise<CreateTodoDto> {
-    console.log("hello");
+    console.log("hello world");
     return this.todoService.createTodo(body, user.username);
   }
 
