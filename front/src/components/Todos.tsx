@@ -221,6 +221,9 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
           todos={todos}
           setTodos={setTodos}
           modalRef={modalRef}
+          notify={notify}
+          totalItems={totalItems}
+          setTotalItems={setTotalItems}
         />,
         document.getElementById("modal") as HTMLElement
       )}

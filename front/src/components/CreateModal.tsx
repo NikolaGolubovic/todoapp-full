@@ -22,9 +22,21 @@ interface ModalProps {
     >
   >;
   modalRef: React.RefObject<HTMLDivElement>;
+  notify: (msg: string, type: string) => void;
+  totalItems: number;
+  setTotalItems: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTodos, modalRef }) => {
+const Modal: React.FC<ModalProps> = ({
+  togglePortal,
+  portalOpened,
+  todos,
+  setTodos,
+  modalRef,
+  notify,
+  totalItems,
+  setTotalItems,
+}) => {
   const [todo, setTodo] = useState("");
   const [completed, setCompleted] = useState(false);
   const [type, setType] = useState<"easy" | "hard">("easy");
@@ -54,13 +66,18 @@ const Modal: React.FC<ModalProps> = ({ togglePortal, portalOpened, todos, setTod
         }
       );
       if (response.status === 201) {
-        if (todos === undefined) return console.log("todos is undefined");
-        setTodos([...todos, { id: response.data.userId, todo, completed, type }]);
+        const newTodo = { id: response.data.userId, todo, completed, type };
+        if (todos === undefined) return notify("Something went wrong with todos, please try again", "error");
+        if (todos.length < 3) {
+          setTodos([...todos, newTodo]);
+        } else {
+          setTodos([newTodo]);
+          setTotalItems(totalItems + 1);
+        }
       }
-      return "success";
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(error.message);
+        notify(error.message, "error");
       }
     }
   }
