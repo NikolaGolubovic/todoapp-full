@@ -7,6 +7,7 @@
   --blue: rgb(17, 138, 178);
   --dark: rgb(7, 59, 76);
   --white: rgb(255, 255, 255);
+  --toastify-color-success: var(--blue);
 }
 
 * {

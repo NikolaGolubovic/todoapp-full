@@ -53,7 +53,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
       }
     }
     try {
-      const response = await axiosApiInstance.get(`api/todos/user/?username=${username}&page=${page + 1}&limit=${3}`, {
+      const response = await axiosApiInstance.get(`/api/todos/user/?username=${username}&page=${page + 1}&limit=${3}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -15,12 +15,14 @@ function App() {
   const [userOn, setUserOn] = useState<boolean>();
 
   function notify(msg: string, type: string): void {
+    let notifyFunc: (() => void) | null = null;
     if (type === "success") {
-      const notifyFunc = () => toast["success"](msg, { position: toast.POSITION.TOP_CENTER });
-      notifyFunc();
+      notifyFunc = () => toast["success"](msg, { position: toast.POSITION.TOP_CENTER });
     }
     if (type === "error") {
-      const notifyFunc = () => toast["error"](msg, { position: toast.POSITION.TOP_CENTER });
+      notifyFunc = () => toast["error"](msg, { position: toast.POSITION.TOP_CENTER });
+    }
+    if (notifyFunc !== null) {
       notifyFunc();
     }
   }
