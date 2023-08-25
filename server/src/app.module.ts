@@ -28,9 +28,8 @@ import { dataSourceConfig } from "db/data-source";
     UsersModule,
     AuthModule,
     RefreshTokenModule,
-    PassportModule,
   ],
   controllers: [AppController],
-  providers: [AppService, ...globalProviders, GoogleStrategy],
+  providers: [AppService, ...globalProviders],
 })
 export class AppModule {}
