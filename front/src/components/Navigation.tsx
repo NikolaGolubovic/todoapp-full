@@ -29,21 +29,21 @@ const Navigation: FC<Props> = ({ userOn, setUserOn }) => {
         </li>
         {!userOn && (
           <li className="ml-10">
-            <NavLink to="login" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+            <NavLink to="/login" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
               Login
             </NavLink>
           </li>
         )}
         {!userOn && (
           <li className="ml-10 mr-10">
-            <NavLink to="register" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
+            <NavLink to="/register" style={({ isActive }) => (isActive ? activeStyle : undefined)}>
               Register
             </NavLink>
           </li>
         )}
         {userOn && (
           <li className="ml-10">
-            <NavLink to="login" style={({ isActive }) => (isActive ? activeStyle : undefined)} onClick={logout}>
+            <NavLink to="/login" style={({ isActive }) => (isActive ? activeStyle : undefined)} onClick={logout}>
               Logout
             </NavLink>
           </li>
