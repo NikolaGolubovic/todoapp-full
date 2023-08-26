@@ -35,7 +35,7 @@ function App() {
         <Route path="/" element={<Homepage setUserOn={setUserOn} />} />
         <Route path="/todos" element={<Todos setUserOn={setUserOn} notify={notify} />} />
         <Route path="/login" element={<SignIn setUserOn={setUserOn} notify={notify} />} />
-        <Route path="/register" element={<SignUp />} />
+        <Route path="/register" element={<SignUp notify={notify} />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

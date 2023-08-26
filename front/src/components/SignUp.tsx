@@ -1,7 +1,10 @@
 import axios, { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { FC, useState } from "react";
+type PropsSignUp = {
+  notify: (msg: string, type: string) => void;
+};
 
-const SignUp = () => {
+const SignUp: FC<PropsSignUp> = ({ notify }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -19,13 +22,10 @@ const SignUp = () => {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
         if (axiosError.response?.status === 401) {
-          console.log("Unauthorized");
+          notify("You don't have persmission for that", "error");
         } else {
-          console.log("error resposne data", error.response?.data);
-          throw new Error(error.response?.data);
+          notify(error.message, "error");
         }
-      } else {
-        console.log(error);
       }
     }
   }

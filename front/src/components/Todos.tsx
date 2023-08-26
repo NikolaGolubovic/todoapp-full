@@ -140,8 +140,8 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
         },
       });
       if (response.status === 200) {
-        setIndexesOfChagnedTodos(indexesOfChangedTodos.filter((elem) => elem !== index));
         notify("Todo edited", "success");
+        setIndexesOfChagnedTodos(indexesOfChangedTodos.filter((elem) => elem !== index));
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {

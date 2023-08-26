@@ -34,8 +34,6 @@ const Homepage: FC<PropsTodos> = ({ setUserOn }) => {
         } else {
           throw new Error(error.response?.data);
         }
-      } else {
-        console.error(error);
       }
     }
   }
