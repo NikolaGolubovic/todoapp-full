@@ -59,8 +59,8 @@ export class TodoService {
 
   async updateTodo(id: number, body: UpdateTodoDto): Promise<string> {
     try {
+      console.log("id", id, "body", body);
       const response = await this.todoRepository.update(id, body);
-      console.log("response", response);
     } catch (error) {
       new HttpException(
         {
