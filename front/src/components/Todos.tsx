@@ -132,6 +132,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
   const editTodo = async (editedTodo: TodoType, e: React.FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const { id, ...todo } = editedTodo;
+    console.log(id, todo);
     const token = getToken(tokenLS);
     try {
       const response = await axiosApiInstance.put(`api/todos/${id}`, todo, {
@@ -140,6 +141,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
         },
       });
       if (response.status === 200) {
+        setIndexesOfChagnedTodos(indexesOfChangedTodos.filter((elem) => elem !== id));
         notify("Todo edited", "success");
       }
     } catch (error) {
@@ -197,7 +199,7 @@ const Todos: FC<PropsTodos> = ({ setUserOn, notify }) => {
             {indexesOfChangedTodos.includes(index) && (
               <button
                 className="inline-block align-baseline mr-2 px-1 py-0.5 rounded-md text-base leading-normal text-white bg-blue-500 transition duration-300 ease-in-out"
-                onClick={(e) => editTodo({ id: todo.id, todo: todo.todo, completed: todo.completed, type: todo.type }, e)}
+                onClick={(e) => editTodo({ id: index, todo: todo.todo, completed: todo.completed, type: todo.type }, e)}
               >
                 Edit
               </button>
