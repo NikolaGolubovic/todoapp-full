@@ -18,7 +18,7 @@ import { GoogleStrategy } from "./google.strategy";
     }),
     ConfigModule.forRoot(),
   ],
-  providers: [AuthService, GoogleStrategy],
+  providers: [AuthService],
   controllers: [AuthController],
   exports: [AuthService],
 })

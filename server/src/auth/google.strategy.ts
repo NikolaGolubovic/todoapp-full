@@ -22,7 +22,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     profile: any,
     done: VerifyCallback,
   ) {
-    console.log("aloha from google strategy");
     // You can implement the validation logic here
     // Typically, you would find or create a user in your database based on the profile information
     // and pass it to the `done` function.
