@@ -9,7 +9,7 @@ import { globalProviders } from "./constants/global.providers";
 import { RefreshTokenModule } from "./refresh-token/refresh-token.module";
 import { ConfigModule } from "@nestjs/config";
 import { PassportModule } from "@nestjs/passport";
-import { GoogleStrategy } from "./auth/google.strategy";
+
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { join } from "path";
 import { dataSourceConfig } from "db/data-source";

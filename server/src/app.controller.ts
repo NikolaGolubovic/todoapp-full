@@ -1,12 +1,18 @@
-import { Controller, Get } from "@nestjs/common";
-import { Response } from "express";
-import { join } from "path";
-import { Res } from "@nestjs/common";
+import { Controller, Get, Req, UseGuards } from "@nestjs/common";
+
+import { AuthGuard } from "@nestjs/passport";
 
 @Controller()
 export class AppController {
-  @Get("*")
-  serveIndex(@Res() res: Response) {
-    res.sendFile(join(__dirname, "..", "..", "build"));
+  @Get("google")
+  @UseGuards(AuthGuard("google"))
+  async googleAuth(@Req() req) {}
+
+  @Get("/api/auth/google/callback")
+  // @UseGuards(AuthGuard("google"))
+  async callback(@Req() req, @Req() res) {
+    console.log("hello from google callback");
+    console.log(req.user);
+    return req.user;
   }
 }

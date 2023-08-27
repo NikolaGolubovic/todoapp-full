@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import { setToken } from "../utils/tokenEncription";
 import { tokenLS, refreshTokenLS, usernameLS } from "../constants/tokenNames";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
+
+const googleId: string = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 type Props = {
   setUserOn: React.Dispatch<React.SetStateAction<boolean | undefined>>;
@@ -45,6 +48,22 @@ const SignIn: FC<Props> = ({ setUserOn, notify }) => {
   }
   return (
     <div className="login-page flex flex-col items-center pt-10vh h-screen">
+      <GoogleOAuthProvider clientId={googleId}>
+        <GoogleLogin
+          onSuccess={async (credentialResponse) => {
+            const response = await axios.get("/api/auth/google", {
+              params: {
+                credential: credentialResponse.credential,
+              },
+            });
+            console.log(response.data);
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+      </GoogleOAuthProvider>
+
       <form className="login-form flex flex-col space-y-6 px-10">
         <input type="text" placeholder="username" onChange={(e) => setUsername(e.target.value)} />
         <input type="password" placeholder="password" onChange={(e) => setPassword(e.target.value)} />

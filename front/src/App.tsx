@@ -29,7 +29,7 @@ function App() {
 
   return (
     <Router>
-      <ToastContainer autoClose={1500} />
+      <ToastContainer autoClose={1100} />
       <Navigation userOn={userOn} setUserOn={setUserOn} />
       <Routes>
         <Route path="/" element={<Homepage setUserOn={setUserOn} />} />
